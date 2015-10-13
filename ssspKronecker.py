@@ -10,6 +10,8 @@ import os
 
 usertop="/home/kaya3/aavila"
 top="%(usertop)s/thesis-repo" %locals()
+KronTotals="%(top)s/Tracking/outputs/sssp/ssspKronTotals" %locals()
+KronMetrics="%(top)s/Tracking/outputs/sssp/ssspKronMetrics" %locals()
 
 #os.system("cd /home/kaya1/aavila/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples"%locals())
 #os.system("make pinatrace_thesis.test"%locals())
@@ -22,10 +24,10 @@ for threads in [1]:
      for edges in [4, 8, 16, 32]:
   
         #run pin using pinatrace (Mem R/W) on sssp program
-        os.system("time (%(top)s/pin-2.14-71313-gcc.4.4.7-linux/pin -t %(top)s/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples/obj-intel64/pinatrace_thesis.so -- %(top)s/Green-Marl/apps/output_cpp/bin/sssp %(top)s/Green-Marl/apps/output_cpp/data/KronGraph%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.bin %(threads)i) &> %(top)s/Tracking/outputs/kroneckerTotals/ssspOutput%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt" %locals())
+        os.system("time (%(top)s/pin-2.14-71313-gcc.4.4.7-linux/pin -t %(top)s/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples/obj-intel64/pinatrace_thesis.so -- %(top)s/Green-Marl/apps/output_cpp/bin/sssp %(top)s/Green-Marl/apps/output_cpp/data/KronGraph%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.bin %(threads)i) &> %(KronTotals)s/ssspOutput%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt" %locals())
   
         #run pin using new MyPinTool (Mem R/W) on sssp program
-        os.system("time (%(top)s/pin-2.14-71313-gcc.4.4.7-linux/pin -t %(top)s/pin-2.14-71313-gcc.4.4.7-linux/source/tools/MyPinTool/obj-intel64/MyPinTool_Thesis.so -o %(top)s/Tracking/outputs/kroneckerMetrics/kroneckerMetric%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt -- %(top)s/Green-Marl/apps/output_cpp/bin/sssp %(top)s/Green-Marl/apps/output_cpp/data/KronGraph%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.bin %(threads)i) &>> %(top)s/Tracking/outputs/kroneckerTotals/ssspOutput%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt" %locals())
+        os.system("time (%(top)s/pin-2.14-71313-gcc.4.4.7-linux/pin -t %(top)s/pin-2.14-71313-gcc.4.4.7-linux/source/tools/MyPinTool/obj-intel64/MyPinTool_Thesis.so -o %(KronMetrics)s/kroneckerMetric%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt -- %(top)s/Green-Marl/apps/output_cpp/bin/sssp %(top)s/Green-Marl/apps/output_cpp/data/KronGraph%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.bin %(threads)i) &>> %(KronTotals)s/ssspOutput%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt" %locals())
   
         #copy default .out info into a metric .txt file
-        os.system("cat %(top)s/Tracking/pyScripts/pinatrace_thesis.out >> %(top)s/Tracking/outputs/kroneckerMetrics/kroneckerMetric%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt" %locals())
+        os.system("cat %(top)s/Tracking/pyScripts/pinatrace_thesis.out >> %(KronMetrics)s/kroneckerMetric%(zero)s%(vertices)i_%(edges)i_%(threads)i.txt" %locals())
