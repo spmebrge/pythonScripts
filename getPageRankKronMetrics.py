@@ -8,8 +8,8 @@ import os
 
 usertop="/home/kaya3/aavila"
 top="%(usertop)s/thesis-repo" %locals()
-MetricsParsed="%(top)s/Tracking/outputs/sssp/ssspMetricsParsed" %locals()
-KronMetrics="%(top)s/Tracking/outputs/sssp/ssspKronMetrics" %locals()
+MetricsParsed="%(top)s/Tracking/outputs/PageRank/PageRankMetricsParsed" %locals()
+KronMetrics="%(top)s/Tracking/outputs/PageRank/PageRankKronMetrics" %locals()
 
 #Clear files before writing
 os.system("""echo "" > %(MetricsParsed)s/BB.txt""" %locals())
