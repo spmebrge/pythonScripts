@@ -1,0 +1,270 @@
+CS449- Senior Thesis
+Yuho Jin
+Fall 2015
+
+Diskspace:
+/home/kaya1/aavila
+
+Change Group
+chgrp -R cal .
+8-27-2015
+To build and run a sample tool on Linux*:
+
+    cd source/tools/SimpleExamples
+    make obj-intel64/opcodemix.so
+    ../../../pin -t obj-intel64/opcodemix.so -- /bin/ls
+
+    This will instrument and run /bin/ls, the output for this tool is in
+    opcodemix.out.
+
+Building and Running examples:
+We navigated to cd source/tools/ManualExamples
+Then use 
+$make [filename].test
+and this will create a .so file in the obj-intel64 directory of your current directory. For exampe:
+$make inscount2.test
+
+Afterwards run
+The output file is in inscount.out
+$../../../pin -t obj-intel64/inscount2.so -- /bin/ls
+This will run the file you just made using the pin tool.
+
+8-28-2015
+Count Intructions/Basic Blocks/Threads
+The output file needs to be specified. In this case it is '-o out.txt' for convenience.
+$/home/kaya1/aavila/pin-2.14-71313-gcc.4.4.7-linux/source/tools/MyPinTool
+$make all
+$../../../pin -t obj-intel64/MyPinTool.so -o out.txt -- /bin/ls
+
+9-1-2015
+Count number of functions with how many instructions in each
+The output file is in the same directory under proccount.out
+$make proccount.test 
+$../../../pin -t obj-intel64/proccount.so -- /bin/ls
+$vi proccount.out 
+
+
+Count Number of Functions
+
+Run Graphic w/ Data
+
+9-4-15
+combine profiles into one program and run that program with the bench marks
+
+9-10-15
+Running a Kronecker graph generator--------------------------------
+
+$cd (top)/graphbench/data/generator
+
+$make all
+
+To produce a data file with 2^2 vertices and an average of 4 edges per vertex, with tsv output, do:
+
+```
+$./generator_omp 4 -e 4 -o output_AA.txt
+
+Combining MyPinTool and proccount from above in order to count Basic Blocks and Function calls-----
+$make BlockFunction_Thesis.test
+$../../../pin -t obj-intel64/BlockFunction_Thesis.so -- /bin/ls
+
+
+9-11-15
+Converting the Kronecker graph created above from .txt to a usable 
+.bin format for Green-Marl -------------------------------------
+
+Change the file to allow create graph using your own input file by substituting the graph_gen.cc and graph_gen_main.cc and graph_gen.h 
+```
+cd Green-Marl/apps/output_cpp/gm_graph/src
+cp <graphbench>/benchmark/green-marl/graph_gen.cc <graphbench>/benchmark/green-marl/graph_gen_main.cc .
+cd ../inc
+cp <graphbench>/benchmark/green-marl/graph_gen.h .
+```
+
+Go to the top of the Green-marl and compile
+
+```
+cd $(top)
+make apps
+```
+
+Generate graph (0 for undirected and 1 for directed graph)
+
+```
+cd $(top)/apps/output_cpp
+bin/graph_gen data/outputName.bin pathToInputFile/inputName.txt 0
+bin/graph_gen data/outputName.bin pathToInputFile/inputName.txt 1
+```
+Running Ultimate work (Pin, BlockFunction.so, sssp, KronGraph.bin, 1 [1 thread])
+
+BlockFunction.so
+$cd /home/kaya1/aavila/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples
+$make BlockFunction_Thesis.test
+
+KronGraph.bin
+$cd (top)/graphbench/data/generator
+$./generator_seq 5 -e 4 -o KronGraph5,4_Thesis.txt
+$cd (top)/Green-Marl/apps/output_cpp/
+$./bin/graph_gen data/KronGraph5,4_Thesis.bin /home/kaya1/aavila/thesis-repo/graphbench/data/generator/KronGraph5,4_Thesis.txt 0
+(note the 0 above is for undirected, 1 for directed graph
+
+Final Command
+$/home/kaya1/aavila/pin-2.14-71313-gcc.4.4.7-linux/pin -t /home/kaya1/aavila/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples/obj-intel64/BlockFunction_Thesis.so -- /home/kaya1/aavila/thesis-repo/Green-Marl/apps/output_cpp/bin/sssp /home/kaya1/aavila/thesis-repo/Green-Marl/apps/output_cpp/data/KronGraph5,4_Thesis.bin 1
+
+09-17-2015
+Python Script
+$cd $(top)/Tracking/
+Created python script called ssspKronecker.py to run the final command with varying vertices and edges, 5-10 and [4, 8, 16, 32] respectively.
+
+The script places any output files (except .bins graphs) in $(top)/Tracking/outputs.
+The outputs directory contains two directories, one for kronecker texts and the other for kronecker metrics (basic block count, function count, instruction count, etc.). 
+
+
+To find a program that finds the number of memory references go to:
+
+$cd /home/kaya1/aavila/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples
+
+$../../../pin -t obj-intel64/countreps.so -memory 1 -- /bin/ls
+
+Questions/Further Research:
+/home/kaya1/aavila/pin-2.14-71313-gcc.4.4.7-linux/source/tools/MemTrace/memtrace_simple.cpp
+How to run this program to grab mem instructions?
+
+9-18-2015
+Memory references
+inside Pin directory
+$(top)source/tools/ManualExamples/pinatrace.cpp
+
+Sorting metric info by ascending order and outputting function name with call frequency
+$sort -s -n -k 4,4 kroneckerMetric5,16.out | awk '{print $1,"\t",$4}' | less
+
+Adding up # of Func. calls on terminal
+$sed '1,7d' kroneckerMetric5,16.out | awk '{sum = sum + $4}END{print sum}' 
+
+9-25-2015
+Basic Block Count and Frequenzy
+Created new file in
+$(top)/source/tools/MyPinTool/MyPinTool_Thesis.cpp
+
+The file contains basic blocks by 'address', 'name', and 'instructions'.
+
+To run the file do:
+$make MyPinTool_Thesis.test
+$../../../pin -t obj-intel64/MyPinTool_Thesis.so -o BBLCount.txt -- /bin/ls
+$less BBLCount.txt
+
+9-29-2015
+Read and Write Memory instruction count and sizes (be sure the file is created with the "make" command below)
+(usertop)s/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples/pinatrace_thesis.cpp
+$make (usertop)s/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples/pinatrace_thesis.test
+
+
+Changed ssspKronecker.py script to get metric information on the following:
+* Number of instructions
+* Number of basic blocks
+* Number of threads
+* Memory Read Instructions
+* Memory Read Size
+* Memory Write Instructions
+* Memory Write Size
+
+
+10-9-2015
+1. createKroneckerGraphs.py
+2. ssspKronecker.py
+3. ssspKroneckerNoPin.py
+4. getKroneckerMetric.py
+
+Re-performed instructions above to create .bin graphs from .txt then re-compiled Green-Marl using 
+$make apps
+Insructions are found on date 9-11-15
+Made sure that the new created .bin files are of different increasing sizes and not the origina 28 bytes for each. 
+* ran the ./ssspKronecker.py command and the new metrics found are increasing, which is what we want.
+* fixed the getKroneckerMetrics.py script to output information to 
+<top>/Tracking/outputs/MetricParsed
+The parsed files are:
+BB.txt
+TotalInst.txt
+MemReadInst.txt
+MemReadSize.txt
+MemWriteInst.txt
+MemWriteSize.txt
+
+PROBLEMS: Our .bin files in the graph were not increasing in size but were staying at 28 bytes each no matter what the k-value (or 2^k vertices). Also our disk space ran out of memory in kaya1 and we had troubles changing the repository to kaya3.
+
+10-12-2015
+updated scripts to include a 0 to all metrics with k value less than 10. 
+ex) kroneckerGraphs05_4_1.txt
+vs  kroneckerGraphs11_4_1.txt
+* Ran all scripts once again and the new metrics can be found in outputs/MetricParsed. The #s are now increasing where as before they were roughly the same.
+
+10-17-2015
+Last login: Fri Oct 16 09:55:10 on ttys000
+Viridiana$ ssh aavila@turing.cs.nmsu.edu
+Password: 
+Last login: Fri Oct 16 10:07:01 2015 from 172.24.113.85
+Have a lot of fun...
+turing[998]% kaya
+Directory: /home/kaya3/aavila
+turing[999]% cd thesis-repo
+Directory: /home/kaya3/aavila/thesis-repo
+turing[1000]% ls
+gnuplotTest  Green-Marl                      README.md        Tracking
+graphbench   pin-2.14-71313-gcc.4.4.7-linux  researching.txt
+turing[1001]% cd Tracking/
+Directory: /home/kaya3/aavila/thesis-repo/Tracking
+turing[1002]% ls
+codeChanges     Green-Marl.txt~  pin.log    run.py           tracking.txt
+Green-Marl.txt  outputs          pyScripts  TODO_Adrian.txt  tracking.txt~
+turing[1003]% vi tracking.txt
+
+
+
+
+
+
+<top>/Tracking/outputs/MetricParsed
+The parsed files are:
+BB.txt
+TotalInst.txt
+MemReadInst.txt
+MemReadSize.txt
+MemWriteInst.txt
+MemWriteSize.txt
+
+PROBLEMS: Our .bin files in the graph were not increasing in size but were staying at 28 bytes each no matter what the k-value (or 2^k vertices). Also our disk space ran out of memory in kaya1 and we had troubles changing the repository to kaya3.
+
+10-12-2015
+updated scripts to include a 0 to all metrics with k value less than 10.
+ex) kroneckerGraphs05_4_1.txt
+vs  kroneckerGraphs11_4_1.txt
+* Ran all scripts once again and the new metrics can be found in outputs/MetricParsed. The #s are now increasing where as before they were roughly the same.
+
+10-17-2015
+awk -v col=3 '{if(NR%col){printf "%s ",$0 }else {printf "%s\n",$0}} ' Time.txt | awk '{ print $1 "\t" $3 "\t" $5}'
+
+10-18-2015
+Ran into problems with memory bytes. For each .bin graph ran using any pin tool, the memory bytes metric was significantly lower than the memory count metric. This did not make sense for each memory instruction reads at least 1 byte, so the minimun size of memory bytes should have been the same as memory count. We noticed that the mode (majority) of the byte size was around 8 bytes. We can multiply the memory count metric by 8 to get rough upper bound on what the total memory byte size metric should range in.
+We fixed the problem with a new code for pinatrace_thesis.cpp which can be found at
+<top>/pin-2.14-71313-gcc.4.4.7-linux/source/tools/ManualExamples 
+
+The new version contains varables for the mem R/W count and size metrics of the type UINT64. The problem was understanding how pin manipulates IARG (arguments containing information about the instruction in question) variables.
+
+* After fixing the problem, the memory bytes metric was now significantly larger than the memory count metric (what we expect to see).
+
+* Future work: graph the new metrics
+  *fix pyScripts to have 0 on all metrics (i.e. kronMetrics05_04_8.txt vs. kronMetrics05_4_8.txt)
+   for readability 
+
+* Change default permissions
+$umask 027
+The above command changes nothing about the user permissons. Groups get the write permission removed, and others get everything removed.
+
+* Change default group
+$chmod g+s /home/kaya3/aavila/thesis-repo
+
+The above command sets the setgid (set group ID) for the thesis-repo directory. Then do:
+$chgrp -R cal /home/kaya3/aavila/thesis-repo
+
+to change all group names on thesis-repo to cal. Every new file will have that group name as well until you turn off the setgid using:
+
+$chmod g-s thesis-repo
