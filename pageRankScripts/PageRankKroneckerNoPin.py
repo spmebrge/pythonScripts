@@ -15,7 +15,7 @@ for threads in [1]:
        zero="0"
      else:
        zero=""
-      for edges in [4, 8, 16, 32]:
-         #run PageRank program
-         os.system("time (%(top)s/Green-Marl/apps/output_cpp/bin/pagerank %(top)s/Green-Marl/apps/output_cpp/data/KronGraph%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.bin %(threads)i) >& %(KronTotalsNoPin)s/totalNoPin%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.txt" %locals())
+     for edges in [4, 8, 16, 32]:
+       #run PageRank program
+       os.system("time (%(top)s/Green-Marl/apps/output_cpp/bin/pagerank %(top)s/Green-Marl/apps/output_cpp/data/KronGraph%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.bin %(threads)i) >& %(KronTotalsNoPin)s/totalNoPin%(zero)s%(vertices)i_%(edges)i_%(threads)i_Thesis.txt" %locals())
 
