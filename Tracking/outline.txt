@@ -1,0 +1,49 @@
+Objective
+ *evaluate program performance using pin
+ *identify bottleneck
+
+Green Marl
+ *Kronecker Graphs (http://cs.stanford.edu/people/jure/pubs/kronecker-jmlr10.pdf)
+    **see above explanation for kron graphs. pseudo network imitator
+    **k value
+    **edge
+    **undirected vs directed graphs
+ *its own compiler
+ *cpp programs
+ *benchmark locations(/home/kaya3/aavila/thesis-repo/Green-Marl/apps/output_cpp/src)
+ *sssp (single-source shortest path [dijkstra])
+ *pageRank  (http://www.hamrtech.com/assets/downloads/Pagerank.pdf)
+    **see above for pageRank explanation. Ranks page for importance (like google)
+
+Pin Tool
+ *JIT compiler
+ *Dynamic
+ *Instrumenting
+ *memory
+ *functions
+ *bb
+ *num instructions
+ *frequency
+ *make sample.test (.cpp)
+Organization
+ *repositories
+ *not practical to store graphs in repo
+ *shared disk space
+
+[Python] Scripts
+ *create graphs
+ *run pin tool (metrics)
+ *parse metrics clean
+ *time stamps (pin/no pin)
+
+Results
+ *explain graph outputs
+ *why we chose indep and dep. variables
+ *general results
+
+Conclusion
+
+Future Goals
+ *increase k value w/ more disk space
+ *run all bench marks
+ *pin point program overhead to specific program line
