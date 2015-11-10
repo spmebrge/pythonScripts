@@ -25,7 +25,6 @@ Pin Tool
  *num instructions
  *frequency
  *make sample.test (.cpp)
-
 Organization
  *repositories
  *not practical to store graphs in repo

@@ -1,0 +1,76 @@
+Authors: Adrian Avila 
+              Esperanza Medina
+Advisor: Dr. Yuho Yin
+
+TITLE: Benchmark Bottleneck Analysis using Pin 
+
+1. Intro - Objective
+  1.1  Evaluate program performance using pin
+  1.2  Identify bottlenecks
+  1.3  Describe Benchmarks
+  1.4  Describe Pin 
+  1.5  Describe Green-Marl
+  1.6  Testing Methodology 
+
+2. Benchmarks
+      2.1 Benchmark locations(/home/kaya3/aavila/thesis-repo/Green-Marl/apps/output_cpp/src)
+      2.2 SSSP (single-source shortest path [dijkstra])
+      2.3 Page Rank (http://www.hamrtech.com/assets/downloads/Pagerank.pdf)
+            **see above for pageRank explanation. Ranks page for importance (like google)
+      
+3. Pin Tool
+    3.1 JIT compiler
+    3.2 Instrumenting
+         3.2.1 Purpose
+         3.2.2 Dynamic
+         3.2.3 Overhead
+    3.3 Metrics
+       3.3.1 BB
+       3.3.2 Memory
+       3.3.3 Num instructions
+       3.3.4 Functions
+       3.3.5 Frequency
+    3.4 Tools
+        3.4.1 Make sample.test (.cpp)
+        3.4.2 Tools Used/Created
+                  3.4.2.1 pinatrace_thesis
+                             a. pinatrace_thesis.out-functionality and overwrite 
+                  3.4.2.2 MyPinTool_Thesis
+                             a. Specified output(.txt)
+4. Green Marl
+    4.1 Kronecker Graphs (http://cs.stanford.edu/people/jure/pubs/kronecker-jmlr10.pdf)
+          see above explanation for kron graphs. pseudo network imitator
+       4.1.1 K value
+       4.1.2 Edges
+       4.1.3 Undirected vs directed graphs
+    4.2 Its own compiler
+
+5. Methodology
+      5.1 Organization
+            5.1.1 Shared Spaces
+                  5.1.1.1 Repositories
+                             a. Not practical to store graphs in repo
+                  5.1.1.2 Workspaces (kaya1, kaya2, kaya3)
+                  5.1.1.3 Dropbox
+                  5.1.1.4 Google Doc vs LibreOffice          
+            5.1.2 Scripts
+                     5.1.2.1 Python
+                            a. Create graphs
+                            b. Run pin tool (metrics)
+                            c. Parse metrics
+                            d. Time stamps (pin/no pin)
+                     5.1.2.2 Gnuplot
+                     5.1.2.3 Shell 
+           5.1.3 Outputs 
+        
+6. Results
+      6.1 Graphs and Analysis
+            6.1.1 Independent and dependent variables
+      6.2 General results
+
+7. Conclusion
+
+8. Further Research
+      8.1 Increase k value w/ more disk space
+      8.2 Run all bench marks
+      8.3 Pin point program overhead to specific program line
